@@ -226,3 +226,4 @@ media/*
 .llmignore
 summarize.py
 code.txt
+private_template/
