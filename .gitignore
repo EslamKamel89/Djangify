@@ -223,3 +223,6 @@ __marimo__/
 staticfiles/*
 media/*
 .env
+.llmignore
+summarize.py
+code.txt
