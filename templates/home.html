@@ -6,31 +6,6 @@
 
 {% block content %}
 
-<header class="border-b border-neutral bg-white">
-  <div class="max-w-7xl mx-auto px-4">
-    <!-- Top Bar (Mobile + Desktop) -->
-    <div
-      class="flex flex-col md:flex-row md:justify-between md:items-center py-2 text-xs md:text-sm text-muted gap-2"
-    >
-      <!-- Language / Currency -->
-      <div class="flex justify-between md:justify-start gap-4">
-        <span class="hover:text-primary cursor-pointer">English</span>
-        <span class="hover:text-primary cursor-pointer">USD</span>
-      </div>
-
-      <!-- Contact -->
-      <div class="flex justify-between md:justify-end gap-4">
-        <a href="#" class="hover:text-primary flex items-center gap-1"
-          >📧 Email</a
-        >
-        <a href="#" class="hover:text-primary flex items-center gap-1"
-          >📞 Call us</a
-        >
-      </div>
-    </div>
-  </div>
-</header>
-
 <section class="border-b border-neutral bg-white">
   <div
     class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center gap-4"
@@ -156,7 +131,7 @@
       >
         <div class="overflow-hidden">
           <img
-            src="/static/images/items/{{ i }}.jpg"
+            src="{% static 'images/items/' %}{{ i }}.jpg"
             class="w-full h-40 md:h-48 object-cover group-hover:scale-105 transition duration-300"
           />
         </div>
@@ -174,25 +149,5 @@
     </div>
   </div>
 </section>
-
-<footer class="border-t border-neutral py-6 bg-white">
-  <div
-    class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted"
-  >
-    <p class="text-center md:text-left">&copy; 2019 Company</p>
-
-    <div class="flex flex-wrap justify-center gap-3 md:gap-6 text-center">
-      <span>info@pixsellz.io</span>
-      <span>+879-332-9375</span>
-      <span>Street name 123</span>
-    </div>
-
-    <div class="flex gap-3 text-lg">
-      <span>💳</span>
-      <span>💳</span>
-      <span>💳</span>
-    </div>
-  </div>
-</footer>
 
 {% endblock %}
