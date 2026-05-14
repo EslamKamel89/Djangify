@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "mathfilters",
     "unfold",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -65,6 +66,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "category.context_processors.all_categories",
             ],
         },
     },

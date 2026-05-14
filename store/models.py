@@ -2,8 +2,9 @@ from typing import Iterable
 
 from django.db import models
 from django.utils.text import slugify
-
+from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
 from category.models import Category
+from django.db.models.query import QuerySet
 
 
 class Product(models.Model):
@@ -20,13 +21,14 @@ class Product(models.Model):
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    images: QuerySet["ProductImage"]
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
             counter = 1
-            while Product.objects.filter(slug=slug).exists():
+            while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug

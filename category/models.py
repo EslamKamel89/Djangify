@@ -1,7 +1,11 @@
-from typing import Iterable
+from typing import TYPE_CHECKING, Iterable
 
 from django.db import models
 from django.utils.text import slugify
+from django.db.models.query import QuerySet
+
+if TYPE_CHECKING:
+    from store.models import Product
 
 
 class Category(models.Model):
@@ -11,6 +15,7 @@ class Category(models.Model):
     image = models.ImageField(upload_to="images/categories/")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    products: QuerySet["Product"]
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
