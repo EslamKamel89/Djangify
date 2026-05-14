@@ -1,3 +1,5 @@
+{% load static %}
+
 <header class="border-b border-neutral bg-white">
   <div class="max-w-7xl mx-auto px-4">
     <!-- Top Bar (Mobile + Desktop) -->
@@ -22,3 +24,92 @@
     </div>
   </div>
 </header>
+<section class="border-b border-neutral bg-white">
+  <div
+    class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center gap-4"
+  >
+    <!-- Top Row (Mobile Layout) -->
+    <div class="flex items-center justify-between w-full md:w-auto">
+      <!-- Logo -->
+      <a href="/" class="flex items-center shrink-0">
+        <img src="{% static 'images/logo.png' %}" class="h-9 md:h-10" />
+      </a>
+
+      <!-- Cart -->
+      <div class="relative md:hidden">
+        <div class="border border-neutral rounded-full p-2">🛒</div>
+        <span
+          class="absolute -top-2 -right-2 bg-error text-white text-xs px-2 py-0.5 rounded-full"
+        >
+          0
+        </span>
+      </div>
+    </div>
+
+    <!-- Categories + Auth -->
+    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+      <!-- Category -->
+      <div x-data="{open:false}" class="relative w-full sm:w-auto">
+        <button
+          @click="open = !open"
+          class="w-full sm:w-auto bg-primary text-white px-4 py-2 rounded-md flex items-center justify-center gap-2"
+        >
+          ☰ Categories
+        </button>
+
+        <div
+          x-show="open"
+          x-transition
+          @click.outside="open=false"
+          class="absolute z-50 mt-2 w-full sm:w-64 bg-white border border-neutral rounded-lg shadow-lg overflow-hidden"
+        >
+          {% for category in all_categories %}
+          <a href="#" class="block px-4 py-2 hover:bg-neutral"
+            >{{category.name}}</a
+          >
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Auth -->
+      <div class="flex md:hidden justify-center w-full sm:w-auto text-sm">
+        <a href="#" class="text-primary">Sign in</a>
+        <span class="mx-2">|</span>
+        <a href="#" class="text-primary">Register</a>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <form class="w-full md:flex-1 flex">
+      <input
+        type="text"
+        placeholder="Search products..."
+        class="flex-1 border border-neutral px-4 py-2 rounded-l-md focus:outline-none focus:border-primary"
+      />
+      <button class="bg-primary text-white px-5 rounded-r-md">🔍</button>
+    </form>
+
+    <!-- Desktop Cart -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- User -->
+      <div class="text-sm text-right">
+        <p class="text-muted text-xs">Welcome guest</p>
+        <div class="w-fit">
+          <a href="#" class="text-primary">Sign in</a>
+          <span class="mx-1">|</span>
+          <a href="#" class="text-primary">Register</a>
+        </div>
+      </div>
+
+      <!-- Cart -->
+      <div class="relative">
+        <div class="border border-neutral rounded-full p-2">🛒</div>
+        <span
+          class="absolute -top-2 -right-2 bg-error text-white text-xs px-2 py-0.5 rounded-full"
+        >
+          0
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

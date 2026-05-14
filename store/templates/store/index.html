@@ -1,0 +1,109 @@
+<!--prettier-ignore-->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Store {% endblock %}
+
+{% block content %}
+
+<!-- Page Header -->
+<section class="">
+  <div class="max-w-7xl mx-auto px-4 py-4">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-2xl md:text-3xl font-bold text-primary">Our Store</h1>
+
+      <p class="text-muted text-sm md:text-base">
+        Explore our latest collections and trending products.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Store Content -->
+<section class="py-4 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
+      <!-- Sidebar -->
+      <aside class="md:col-span-4 lg:col-span-3">
+        <div class="space-y-5">
+          <!-- Categories-->
+          {% include 'store/partials/categories.html' %}
+          <!-- Sizes -->
+          {% include 'store/partials/sizes.html' %}
+          <!-- Price -->
+          {% include 'store/partials/prices.html' %}
+        </div>
+      </aside>
+
+      <!-- Products -->
+      <main class="md:col-span-8 lg:col-span-9">
+        <!-- Top -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-neutral pb-4 mb-6"
+        >
+          <p class="text-muted">
+            <span class="font-semibold text-primary">32</span>
+            items found
+          </p>
+
+          <div class="flex items-center gap-3">
+            <button
+              class="border border-neutral rounded-lg px-4 py-2 text-sm hover:border-primary transition"
+            >
+              Latest
+            </button>
+
+            <button
+              class="border border-neutral rounded-lg px-4 py-2 text-sm hover:border-primary transition"
+            >
+              Popular
+            </button>
+          </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <!--prettier-ignore-->
+          {% for product in products %}
+          {% include 'store/partials/product_card.html'%}
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-10 flex justify-center">
+          <div class="flex items-center gap-2">
+            <button
+              class="px-4 py-2 border border-neutral rounded-lg text-muted cursor-not-allowed"
+            >
+              Previous
+            </button>
+
+            <button class="px-4 py-2 rounded-lg bg-primary text-white">
+              1
+            </button>
+
+            <button
+              class="px-4 py-2 border border-neutral rounded-lg hover:border-primary transition"
+            >
+              2
+            </button>
+
+            <button
+              class="px-4 py-2 border border-neutral rounded-lg hover:border-primary transition"
+            >
+              3
+            </button>
+
+            <button
+              class="px-4 py-2 border border-neutral rounded-lg hover:border-primary transition"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
