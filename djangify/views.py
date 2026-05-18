@@ -14,11 +14,12 @@ class Home(View):
         products = [
             {
                 "name": p.name,
-                "price": p.price,
-                "image_url": pydash.get(
-                    p.images.filter(is_main=True).all().first(), "image.url"
-                )
-                or "https://placehold.co/600x400",
+                "price": p.display_price,
+                "slug": p.slug,
+                "image_url": next(
+                    (img.image.url for img in p.images.all() if img.is_main),
+                    "https://placehold.co/600x400",
+                ),
             }
             for p in products
         ]

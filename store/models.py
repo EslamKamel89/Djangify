@@ -37,6 +37,14 @@ class Product(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    @property
+    def display_price(self):
+        return f"{self.price / 100:.2f}"
+
+    @property
+    def original_price(self):
+        return f"{(self.price * 1.2) / 100:.2f}"
+
     class Meta:
         ordering = ("name",)
 
