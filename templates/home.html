@@ -1,6 +1,5 @@
 <!--prettier-ignore-->
 {% extends 'base.html' %}
-{% load mathfilters %}
 {% load static %}
 
 {% block title %} Djangify {% endblock %}
@@ -86,7 +85,7 @@
       </div>
 
       <a
-        href="#"
+        href="{% url 'store' %}"
         class="hidden sm:inline-flex items-center gap-2 text-sm md:text-base border border-primary text-primary px-5 py-2.5 rounded-xl hover:bg-primary hover:text-white transition duration-300"
       >
         View All
@@ -97,58 +96,16 @@
     <div
       class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
     >
+      <!--prettier-ignore-->
       {% for product in products %}
-      <div
-        class="group bg-white border border-neutral rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition duration-300"
-      >
-        <div class="relative overflow-hidden">
-          <img
-            src="{{ product.image_url }}"
-            class="w-full h-44 md:h-56 object-cover group-hover:scale-105 transition duration-500"
-          />
-
-          <!-- CTA Overlay -->
-          <div
-            class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center"
-          >
-            <a
-              href="#"
-              class="bg-white text-primary px-4 py-2 rounded-xl font-medium shadow-lg hover:scale-105 transition"
-            >
-              View Product
-            </a>
-          </div>
-        </div>
-
-        <div class="p-3 md:p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <h3
-                class="text-sm md:text-base font-semibold text-neutral-800 group-hover:text-primary transition"
-              >
-                {{ product.name }}
-              </h3>
-
-              <p class="text-accent font-bold mt-2 text-sm md:text-base">
-                ${{ product.price|div:100 }}
-              </p>
-            </div>
-
-            <button
-              class="shrink-0 w-10 h-10 rounded-full bg-neutral hover:bg-primary hover:text-white transition flex items-center justify-center"
-            >
-              🛒
-            </button>
-          </div>
-        </div>
-      </div>
+      {% include 'partials/product_card.html' %}
       {% endfor %}
     </div>
 
     <!-- Mobile CTA -->
     <div class="mt-8 flex justify-center sm:hidden">
       <a
-        href="#"
+        href="{% url 'store' %}"
         class="inline-flex items-center gap-2 border border-primary text-primary px-6 py-3 rounded-xl hover:bg-primary hover:text-white transition duration-300"
       >
         View All Products

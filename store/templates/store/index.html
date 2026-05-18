@@ -42,8 +42,15 @@
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-neutral pb-4 mb-6"
         >
           <p class="text-muted">
-            <span class="font-semibold text-primary">32</span>
+            <span class="font-semibold text-primary">{{products_count}}</span>
             items found
+            <!--prettier-ignore-->
+            {% if selected_category %}
+             in
+            <span class="font-semibold text-primary">
+              {{ selected_category.name}}
+            </span>
+            Category {% endif %}
           </p>
 
           <div class="flex items-center gap-3">
