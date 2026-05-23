@@ -7,10 +7,7 @@
 {% block content %}
 
 <!-- Product Detail -->
-<section
-  class="bg-neutral py-6 md:py-10"
-  x-data="{selectedImage:'{{ main_image }}' }"
->
+<section class="bg-neutral py-6 md:py-10" x-data="product_details_app()">
   <div class="max-w-7xl mx-auto px-4">
     <div
       class="bg-white rounded-2xl border border-neutral overflow-hidden shadow-sm"
@@ -61,7 +58,7 @@
               class="text-xs px-3 py-1.5 rounded-full font-medium {% if product.is_available %} bg-success text-white {% else %} bg-error text-white {% endif %}"
             >
               <!--prettier-ignore-->
-              {% if product.is_available %}
+              {% if product.is_available and product.stock > 0 %}
               In Stock
               {% else %}
               Not Available
@@ -227,7 +224,8 @@
           <!-- Actions -->
           <div class="flex flex-col sm:flex-row gap-3 mt-2">
             <button
-              class="flex-1 bg-primary text-white py-3 rounded-2xl text-sm font-medium hover:opacity-90 transition flex items-center justify-center gap-2 shadow-sm"
+              class="flex-1 bg-primary text-white py-3 rounded-2xl text-sm font-medium hover:opacity-90 transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
+              :disabled="!productIsAvailable || productStockCount <= 0"
             >
               <i class="bi bi-cart3"></i>
               Add to Cart
@@ -306,5 +304,21 @@
     </section>
   </div>
 </section>
+<!--prettier-ignore-->
+{{ product.is_available|json_script:"product_is_available_id" }}
+{{ product.stock|json_script:"product_stock_id" }}
+<script>
+  function product_details_app() {
+    return {
+      selectedImage: "{{ main_image }}",
+      productIsAvailable: JSON.parse(
+        document.getElementById("product_is_available_id").textContent,
+      ),
+      productStockCount: JSON.parse(
+        document.getElementById("product_stock_id").textContent,
+      ),
+    };
+  }
+</script>
 
 {% endblock %}

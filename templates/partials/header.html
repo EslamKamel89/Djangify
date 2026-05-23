@@ -36,14 +36,14 @@
       </a>
 
       <!-- Cart -->
-      <div class="relative md:hidden">
+      <a href="{% url 'cart_view' %}" class="relative md:hidden">
         <div class="border border-neutral rounded-full p-2">🛒</div>
         <span
           class="absolute -top-2 -right-2 bg-error text-white text-xs px-2 py-0.5 rounded-full"
         >
           0
         </span>
-      </div>
+      </a>
     </div>
 
     <!-- Categories + Auth -->
@@ -107,14 +107,14 @@
       </div>
 
       <!-- Cart -->
-      <div class="relative">
+      <a href="{% url 'cart_view' %}" class="relative">
         <div class="border border-neutral rounded-full p-2">🛒</div>
         <span
           class="absolute -top-2 -right-2 bg-error text-white text-xs px-2 py-0.5 rounded-full"
         >
           0
         </span>
-      </div>
+      </a>
     </div>
   </div>
 </section>

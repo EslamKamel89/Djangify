@@ -1,3 +1,4 @@
+{% load static %}
 <footer class="border-t border-neutral bg-white">
   <div class="max-w-7xl mx-auto px-4 py-8">
     <div
@@ -36,21 +37,7 @@
 
       <!-- Right: Payment Icons -->
       <div class="flex items-center justify-center md:justify-end gap-3">
-        <div
-          class="w-10 h-10 flex items-center justify-center border border-neutral rounded-lg hover:border-primary hover:bg-neutral transition"
-        >
-          💳
-        </div>
-        <div
-          class="w-10 h-10 flex items-center justify-center border border-neutral rounded-lg hover:border-primary hover:bg-neutral transition"
-        >
-          💳
-        </div>
-        <div
-          class="w-10 h-10 flex items-center justify-center border border-neutral rounded-lg hover:border-primary hover:bg-neutral transition"
-        >
-          💳
-        </div>
+        <img src="{% static 'images/misc/payments.png' %}" alt="" />
       </div>
     </div>
   </div>
