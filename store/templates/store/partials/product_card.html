@@ -27,10 +27,6 @@
       <del class="text-muted text-sm"> ${{ product.original_price }} </del>
     </div>
 
-    <button
-      class="mt-4 w-full bg-primary text-white py-2.5 rounded-xl hover:opacity-90 transition"
-    >
-      Add to Cart
-    </button>
+    {% include 'store/partials/add_to_cart_button.html' %}
   </div>
 </div>

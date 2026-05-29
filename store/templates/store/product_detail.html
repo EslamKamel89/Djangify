@@ -223,14 +223,7 @@
 
           <!-- Actions -->
           <div class="flex flex-col sm:flex-row gap-3 mt-2">
-            <button
-              class="flex-1 bg-primary text-white py-3 rounded-2xl text-sm font-medium hover:opacity-90 transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
-              :disabled="!productIsAvailable || productStockCount <= 0"
-            >
-              <i class="bi bi-cart3"></i>
-              Add to Cart
-            </button>
-
+            {% include 'store/partials/add_to_cart_button.html' %}
             <button
               class="w-full sm:w-13 h-13 rounded-2xl border border-neutral hover:border-primary hover:text-primary transition flex items-center justify-center bg-white"
             >

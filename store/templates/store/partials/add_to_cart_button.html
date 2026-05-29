@@ -1,0 +1,19 @@
+<form action="{% url 'update_cart_item' %}" method="POST">
+  {% csrf_token %}
+  <input
+    type="hidden"
+    class="hidden"
+    name="product_id"
+    value="{{ product.id }}"
+  />
+  <input type="hidden" name="quantity" value="1" class="hidden" />
+  <input type="hidden" name="action" value="inc" class="hidden" />
+  <button
+    class="flex-1 bg-primary text-white p-3 rounded-2xl text-sm font-medium hover:opacity-90 transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
+    type="submit"
+    :disabled="!productIsAvailable || productStockCount <= 0"
+  >
+    <i class="bi bi-cart3"></i>
+    Add to Cart
+  </button>
+</form>
