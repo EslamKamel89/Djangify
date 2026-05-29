@@ -1,4 +1,5 @@
 from django.db import models
+
 from accounts.models import User
 from store.models import Product
 
@@ -11,6 +12,7 @@ class Cart(models.Model):
         null=True,
         related_name="carts",
     )
+    session_id = models.CharField(max_length=255, db_index=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

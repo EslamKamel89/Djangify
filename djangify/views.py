@@ -1,9 +1,9 @@
+import pydash
 from django.http import HttpRequest, HttpResponse
-from django.views import View
 from django.shortcuts import render
+from django.views import View
 
 from store.models import Product
-import pydash
 
 
 class Home(View):
@@ -13,6 +13,7 @@ class Home(View):
         )
         products = [
             {
+                "id": p.pk,
                 "name": p.name,
                 "price": p.display_price,
                 "slug": p.slug,

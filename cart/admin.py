@@ -12,10 +12,12 @@ class CartItemAdmin(TabularInline):
 @admin.register(Cart)
 class CartAdmin(ModelAdmin):
     list_display = (
+        "id",
         "user",
+        "session_id",
         "created_at",
         "updated_at",
     )
     list_display_links = ("id", "user")
     inlines = [CartItemAdmin]
-    readonly_fields = ("created_at", "updated_at")
+    readonly_fields = ("created_at", "updated_at", "session_id")

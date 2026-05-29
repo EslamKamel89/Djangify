@@ -1,12 +1,11 @@
+import pydash
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 
 from category.models import Category
 from djangify.utils import pr
 from store.models import Product
-from django.shortcuts import get_object_or_404
-import pydash
 
 
 class StoreView(View):
@@ -22,6 +21,7 @@ class StoreView(View):
         products_count = products.count()
         products = [
             {
+                "id": p.pk,
                 "name": p.name,
                 "price": p.display_price,
                 "original_price": p.original_price,
