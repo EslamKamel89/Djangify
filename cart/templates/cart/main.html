@@ -2,12 +2,16 @@
 {% extends 'base.html' %}
 
 {% load static %}
-
+{% load mathfilters %}
 {% block title %} Djangify Cart {% endblock %}
 
 {% block content %}
 
-<section class="bg-neutral py-6 md:py-10">
+<section
+  class="bg-neutral py-6 md:py-10"
+  x-data="cartPage()"
+  x-init="restoreScroll()"
+>
   <div class="max-w-7xl mx-auto px-4">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       <!-- Cart Items -->
@@ -15,97 +19,208 @@
         <div
           class="bg-white border border-neutral rounded-2xl overflow-hidden shadow-sm"
         >
-          <!-- Desktop Header -->
+          <!-- Header -->
           <div
-            class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-neutral text-sm font-medium text-muted"
+            class="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-neutral bg-neutral"
           >
-            <div class="col-span-6">Product</div>
-            <div class="col-span-2 text-center">Quantity</div>
-            <div class="col-span-2 text-center">Price</div>
-            <div class="col-span-2 text-right">Action</div>
+            <div class="col-span-6 text-xs uppercase tracking-wider text-muted">
+              Product
+            </div>
+
+            <div
+              class="col-span-2 text-center text-xs uppercase tracking-wider text-muted"
+            >
+              Quantity
+            </div>
+
+            <div
+              class="col-span-2 text-center text-xs uppercase tracking-wider text-muted"
+            >
+              Total
+            </div>
+
+            <div
+              class="col-span-2 text-right text-xs uppercase tracking-wider text-muted"
+            >
+              Remove
+            </div>
           </div>
 
-          <!-- Cart Item -->
-          {% for i in "123" %}
-          <div
-            x-data="{quantity:1}"
-            class="p-4 md:p-6 border-b border-neutral last:border-0"
-          >
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-              <!-- Product -->
-              <div class="md:col-span-6 flex gap-4">
-                <div
-                  class="w-24 h-24 rounded-2xl overflow-hidden border border-neutral bg-neutral shrink-0"
-                >
-                  <img
-                    src="{% static 'images/items/11.jpg' %}"
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-
-                <div class="flex flex-col justify-center">
+          <!--prettier-ignore-->
+          {% if cart_items %}
+          {% for item in cart_items %}
+          {% if item.product %}
+          <div class="relative">
+            <div
+              id="cart-item-{{ item.id }}"
+              class="group p-4 md:p-5 border-b border-neutral last:border-0 hover:bg-neutral/40 transition-all duration-500"
+            >
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                <!-- Product -->
+                <div class="md:col-span-6 flex gap-4">
                   <a
                     href="#"
-                    class="font-semibold text-neutral-900 hover:text-primary transition line-clamp-2"
+                    class="w-24 h-24 rounded-2xl overflow-hidden border border-neutral bg-white shrink-0 shadow-sm"
                   >
-                    Camera Canon EOS M50 Kit
+                    <img
+                      src="{{ item.product.main_image }}"
+                      class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
                   </a>
 
-                  <p class="text-sm text-muted mt-2 leading-6">
-                    Matrix: 25 Mpx
-                    <br />
-                    Brand: Canon
-                  </p>
-                </div>
-              </div>
+                  <div class="flex flex-col justify-center min-w-0">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span
+                        class="text-[10px] uppercase tracking-wide px-2.5 py-1 rounded-full bg-neutral text-muted border border-neutral"
+                      >
+                        {{ item.product.category.name }}
+                      </span>
+                    </div>
 
-              <!-- Quantity -->
-              <div class="md:col-span-2">
-                <div
-                  class="flex items-center justify-center border border-neutral rounded-xl overflow-hidden w-fit mx-auto"
-                >
-                  <button
-                    @click="if(quantity > 1) quantity--"
-                    class="w-10 h-10 flex items-center justify-center hover:bg-neutral transition"
+                    <a
+                      href="#"
+                      class="font-semibold text-sm text-neutral-900 hover:text-primary transition line-clamp-2"
+                    >
+                      {{ item.product.name }}
+                    </a>
+
+                    <p class="text-xs text-muted mt-2 leading-5 line-clamp-2">
+                      {{ item.product.description }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="md:col-span-2">
+                  <div
+                    class="flex items-center justify-center border border-neutral rounded-xl overflow-hidden w-fit mx-auto bg-white shadow-sm"
                   >
-                    <i class="bi bi-dash-lg"></i>
-                  </button>
+                    <form
+                      action="{% url 'update_cart_item' %}"
+                      method="POST"
+                      @submit="sessionStorage.setItem('last_cart_item', '{{ item.id }}')"
+                    >
+                      {% csrf_token %}
+                      <input
+                        type="hidden"
+                        name="product_id"
+                        value="{{ item.product.id }}"
+                      />
+                      <input type="hidden" name="quantity" value="1" />
+                      <input type="hidden" name="action" value="dec" />
 
-                  <input
-                    type="text"
-                    x-model="quantity"
-                    class="w-12 text-center outline-none text-sm"
-                  />
+                      <button
+                        class="w-10 h-10 flex items-center justify-center text-muted hover:bg-neutral hover:text-primary transition"
+                      >
+                        <i class="bi bi-dash-lg text-xs"></i>
+                      </button>
+                    </form>
 
-                  <button
-                    @click="quantity++"
-                    class="w-10 h-10 flex items-center justify-center hover:bg-neutral transition"
-                  >
-                    <i class="bi bi-plus-lg"></i>
-                  </button>
+                    <input
+                      type="text"
+                      value="{{ item.quantity }}"
+                      disabled
+                      class="w-10 text-center text-sm font-semibold bg-white outline-none"
+                    />
+
+                    <form
+                      action="{% url 'update_cart_item' %}"
+                      method="POST"
+                      @submit="sessionStorage.setItem('last_cart_item', '{{ item.id }}')"
+                    >
+                      {% csrf_token %}
+                      <input
+                        type="hidden"
+                        name="product_id"
+                        value="{{ item.product.id }}"
+                      />
+                      <input type="hidden" name="quantity" value="1" />
+                      <input type="hidden" name="action" value="inc" />
+
+                      <button
+                        class="w-10 h-10 flex items-center justify-center text-muted hover:bg-neutral hover:text-primary transition"
+                      >
+                        <i class="bi bi-plus-lg text-xs"></i>
+                      </button>
+                    </form>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Price -->
-              <div class="md:col-span-2 text-center">
-                <div class="flex flex-col gap-1">
-                  <span class="font-bold text-accent text-lg"> $1156.00 </span>
+                <!-- Price -->
+                <div class="md:col-span-2 text-center">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-bold text-accent text-lg">
+                      ${{ item.price_at_purchase|mul:item.quantity|div:100 }}
+                    </span>
 
-                  <span class="text-sm text-muted"> $315.20 each </span>
+                    <span class="text-xs text-muted">
+                      ${{ item.price_at_purchase|div:100 }} each
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Remove -->
-              <div class="md:col-span-2 flex md:justify-end">
-                <button
-                  class="w-full md:w-auto bg-error text-white px-5 py-2.5 rounded-xl hover:opacity-90 transition text-sm font-medium"
-                >
-                  Remove
-                </button>
+                <!-- Remove -->
+                <div class="md:col-span-2 flex md:justify-end">
+                  <form action="{% url 'update_cart_item' %}" method="POST">
+                    {% csrf_token %}
+                    <input
+                      type="hidden"
+                      name="product_id"
+                      value="{{ item.product.id }}"
+                    />
+                    <input type="hidden" name="quantity" value="0" />
+                    <input type="hidden" name="action" value="del" />
+
+                    <button
+                      class="w-full md:w-auto border border-error text-error px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-error hover:text-white transition flex items-center justify-center gap-2"
+                    >
+                      <i class="bi bi-trash3"></i>
+                      Remove
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
-          {% endfor %}
+
+          {% else %}
+          <div class="p-8 text-center border-b border-neutral">
+            <div
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral text-muted text-sm"
+            >
+              <i class="bi bi-exclamation-circle"></i>
+              Product no longer available
+            </div>
+          </div>
+          {% endif %} {% endfor %} {% else %}
+
+          <!-- Empty Cart -->
+          <div class="px-6 py-16 text-center">
+            <div
+              class="w-20 h-20 mx-auto rounded-full bg-neutral flex items-center justify-center mb-5"
+            >
+              <i class="bi bi-cart-x text-3xl text-muted"></i>
+            </div>
+
+            <h3 class="text-lg font-semibold text-neutral-900 mb-2">
+              Your cart is empty
+            </h3>
+
+            <p class="text-sm text-muted max-w-md mx-auto mb-6">
+              Looks like you haven't added any products yet. Explore our
+              collection and find something you'll love.
+            </p>
+
+            <a
+              href="{% url 'store' %}"
+              class="inline-flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-xl text-sm font-medium hover:opacity-90 transition"
+            >
+              <i class="bi bi-bag"></i>
+              Continue Shopping
+            </a>
+          </div>
+
+          {% endif %}
         </div>
       </aside>
 
@@ -116,7 +231,7 @@
         >
           <!-- Title -->
           <div class="mb-5">
-            <h2 class="text-xl font-bold text-primary">Order Summary</h2>
+            <h2 class="text-lg font-bold text-primary">Order Summary</h2>
 
             <p class="text-sm text-muted mt-1">
               Review your order before checkout
@@ -128,28 +243,59 @@
             <div class="flex items-center justify-between text-sm">
               <span class="text-muted">Subtotal</span>
 
-              <span class="font-medium text-neutral-900"> $69.97 </span>
+              <span class="font-medium text-neutral-900">
+                ${{ total|div:100 }}
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-muted">Shipping</span>
+
+              <span class="text-success font-medium">Free</span>
             </div>
 
             <div class="flex items-center justify-between text-sm">
               <span class="text-muted">Tax</span>
 
-              <span class="font-medium text-neutral-900"> $10.00 </span>
+              <span class="font-medium text-neutral-900">$10.00</span>
             </div>
 
             <div class="border-t border-neutral pt-4">
               <div class="flex items-center justify-between">
-                <span class="font-semibold text-neutral-900"> Total </span>
+                <span class="font-semibold text-neutral-900">Total</span>
 
-                <span class="text-2xl font-bold text-accent"> $59.97 </span>
+                <span class="text-xl font-bold text-accent">
+                  ${{ total|div:100 }}
+                </span>
               </div>
             </div>
           </div>
 
+          <!-- Trust Badges -->
+          <div class="grid grid-cols-2 gap-3 mt-6">
+            <div
+              class="border border-neutral rounded-xl p-3 text-center bg-neutral"
+            >
+              <i class="bi bi-shield-check text-primary text-lg"></i>
+              <p class="text-xs text-muted mt-1">Secure Checkout</p>
+            </div>
+
+            <div
+              class="border border-neutral rounded-xl p-3 text-center bg-neutral"
+            >
+              <i class="bi bi-truck text-primary text-lg"></i>
+              <p class="text-xs text-muted mt-1">Fast Delivery</p>
+            </div>
+          </div>
+
           <!-- Payment -->
-          <div class="mt-6 border border-neutral rounded-2xl p-4 bg-neutral">
-            <div class="flex items-center justify-center gap-3 text-2xl">
-              <img src="{% static 'images/misc/payments.png' %}" alt="" />
+          <div class="mt-5 border border-neutral rounded-2xl p-4 bg-neutral">
+            <div class="flex justify-center">
+              <img
+                src="{% static 'images/misc/payments.png' %}"
+                alt="Payment Methods"
+                class="max-w-full"
+              />
             </div>
 
             <p class="text-xs text-muted text-center mt-3">
@@ -161,15 +307,15 @@
           <div class="mt-6 space-y-3">
             <a
               href="#"
-              class="w-full bg-primary text-white py-3 rounded-2xl font-medium flex items-center justify-center gap-2 hover:opacity-90 transition"
+              class="w-full bg-primary text-white py-3 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 transition shadow-sm"
             >
               <i class="bi bi-bag-check"></i>
-              Checkout
+              Proceed to Checkout
             </a>
 
             <a
               href="{% url 'store' %}"
-              class="w-full border border-neutral py-3 rounded-2xl font-medium flex items-center justify-center gap-2 hover:border-primary hover:text-primary transition bg-white"
+              class="w-full border border-neutral py-3 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 hover:border-primary hover:text-primary transition bg-white"
             >
               <i class="bi bi-arrow-left"></i>
               Continue Shopping
@@ -179,6 +325,33 @@
       </aside>
     </div>
   </div>
+  <script>
+    function cartPage() {
+      return {
+        restoreScroll() {
+          this.$nextTick(() => {
+            const itemId = sessionStorage.getItem("last_cart_item");
+            if (!itemId) return;
+            const element = document.getElementById(`cart-item-${itemId}`);
+            if (!element) return;
+            element.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+            element.classList.add("shadow-2xl", "bg-primary/5", "scale-[1.05]");
+            setTimeout(() => {
+              element.classList.remove(
+                "shadow-2xl",
+                "bg-primary/5",
+                "scale-[1.05]",
+              );
+            }, 2000);
+            sessionStorage.removeItem("last_cart_item");
+          });
+        },
+      };
+    }
+  </script>
 </section>
 
 {% endblock %}
