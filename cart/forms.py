@@ -5,8 +5,10 @@ from store.models import Product
 
 class UpdateCartItemForm(forms.Form):
     product_id = forms.IntegerField(min_value=1)
-    quantity = forms.IntegerField(min_value=1, initial=1)
-    action = forms.ChoiceField(choices=[("inc", "Increase"), ("dec", "Decrease")])
+    quantity = forms.IntegerField(min_value=0, initial=1)
+    action = forms.ChoiceField(
+        choices=[("inc", "Increase"), ("dec", "Decrease"), ("del", "Delete")]
+    )
     product: Product
 
     def clean_product_id(self):

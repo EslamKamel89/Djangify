@@ -1,10 +1,11 @@
-from typing import Iterable
+from typing import Iterable, Optional, cast
 
 from django.db import models
-from django.utils.text import slugify
 from django.db.models.fields.related_descriptors import ReverseManyToOneDescriptor
-from category.models import Category
 from django.db.models.query import QuerySet
+from django.utils.text import slugify
+
+from category.models import Category
 
 
 class Product(models.Model):
@@ -21,7 +22,6 @@ class Product(models.Model):
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    images: QuerySet["ProductImage"]
 
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
@@ -44,6 +44,13 @@ class Product(models.Model):
     @property
     def original_price(self):
         return f"{(self.price * 1.2) / 100:.2f}"
+
+    @property
+    def main_image(self) -> str:
+        main_image = cast(ProductImage | None, self.images.filter(is_main=True).first())  # type: ignore
+        if main_image:
+            return main_image.image.url
+        return "https://placehold.co/600x400"
 
     class Meta:
         ordering = ("name",)
