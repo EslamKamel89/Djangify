@@ -221,14 +221,47 @@
             </div>
           </div>
 
+          <div class="flex items-center gap-2 py-4">
+            <span class="w-2 h-2 rounded-full bg-success"></span>
+
+            <span class="text-sm text-muted">
+              {{ product.stock }} items available
+            </span>
+          </div>
           <!-- Actions -->
           <div class="flex flex-col sm:flex-row gap-3 mt-2">
+            <!--prettier-ignore-->
+            {% if cart_item %}
+            {% include 'store/partials/update_cart.html' with item=cart_item %}
+            {% else %}
             {% include 'store/partials/add_to_cart_button.html' %}
-            <button
-              class="w-full sm:w-13 h-13 rounded-2xl border border-neutral hover:border-primary hover:text-primary transition flex items-center justify-center bg-white"
-            >
-              <i class="bi bi-heart text-base"></i>
-            </button>
+            {% endif %}
+            <div class="flex items-center gap-3">
+              <!-- Cart -->
+              <a
+                href="{% url 'cart_view' %}"
+                class="relative h-13 px-5 rounded-2xl border border-neutral bg-white flex items-center justify-center gap-3 hover:border-primary hover:text-primary transition"
+              >
+                <i class="bi bi-cart3 text-lg"></i>
+
+                <span class="hidden sm:inline text-sm font-medium"> Cart </span>
+
+                {% if count %}
+                <span
+                  class="absolute -top-2 -right-2 min-w-6 h-6 px-1 rounded-full bg-error text-white text-xs font-semibold flex items-center justify-center"
+                >
+                  {{ count }}
+                </span>
+                {% endif %}
+              </a>
+
+              <!-- Wishlist -->
+              <button
+                class="h-13 w-13 rounded-2xl border border-neutral bg-white flex items-center justify-center hover:border-primary hover:text-primary hover:bg-primary/5 transition"
+              >
+                <i class="bi bi-heart text-lg"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@
 
 <section
   class="bg-neutral py-6 md:py-10"
-  x-data="cartPage()"
+  x-data="updateCartScrollRestore()"
   x-init="restoreScroll()"
 >
   <div class="max-w-7xl mx-auto px-4">
@@ -50,138 +50,7 @@
           {% if cart_items %}
           {% for item in cart_items %}
           {% if item.product %}
-          <div class="relative">
-            <div
-              id="cart-item-{{ item.id }}"
-              class="group p-4 md:p-5 border-b border-neutral last:border-0 hover:bg-neutral/40 transition-all duration-500"
-            >
-              <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                <!-- Product -->
-                <div class="md:col-span-6 flex gap-4">
-                  <a
-                    href="#"
-                    class="w-24 h-24 rounded-2xl overflow-hidden border border-neutral bg-white shrink-0 shadow-sm"
-                  >
-                    <img
-                      src="{{ item.product.main_image }}"
-                      class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                    />
-                  </a>
-
-                  <div class="flex flex-col justify-center min-w-0">
-                    <div class="flex items-center gap-2 mb-2">
-                      <span
-                        class="text-[10px] uppercase tracking-wide px-2.5 py-1 rounded-full bg-neutral text-muted border border-neutral"
-                      >
-                        {{ item.product.category.name }}
-                      </span>
-                    </div>
-
-                    <a
-                      href="#"
-                      class="font-semibold text-sm text-neutral-900 hover:text-primary transition line-clamp-2"
-                    >
-                      {{ item.product.name }}
-                    </a>
-
-                    <p class="text-xs text-muted mt-2 leading-5 line-clamp-2">
-                      {{ item.product.description }}
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Quantity -->
-                <div class="md:col-span-2">
-                  <div
-                    class="flex items-center justify-center border border-neutral rounded-xl overflow-hidden w-fit mx-auto bg-white shadow-sm"
-                  >
-                    <form
-                      action="{% url 'update_cart_item' %}"
-                      method="POST"
-                      @submit="sessionStorage.setItem('last_cart_item', '{{ item.id }}')"
-                    >
-                      {% csrf_token %}
-                      <input
-                        type="hidden"
-                        name="product_id"
-                        value="{{ item.product.id }}"
-                      />
-                      <input type="hidden" name="quantity" value="1" />
-                      <input type="hidden" name="action" value="dec" />
-
-                      <button
-                        class="w-10 h-10 flex items-center justify-center text-muted hover:bg-neutral hover:text-primary transition"
-                      >
-                        <i class="bi bi-dash-lg text-xs"></i>
-                      </button>
-                    </form>
-
-                    <input
-                      type="text"
-                      value="{{ item.quantity }}"
-                      disabled
-                      class="w-10 text-center text-sm font-semibold bg-white outline-none"
-                    />
-
-                    <form
-                      action="{% url 'update_cart_item' %}"
-                      method="POST"
-                      @submit="sessionStorage.setItem('last_cart_item', '{{ item.id }}')"
-                    >
-                      {% csrf_token %}
-                      <input
-                        type="hidden"
-                        name="product_id"
-                        value="{{ item.product.id }}"
-                      />
-                      <input type="hidden" name="quantity" value="1" />
-                      <input type="hidden" name="action" value="inc" />
-
-                      <button
-                        class="w-10 h-10 flex items-center justify-center text-muted hover:bg-neutral hover:text-primary transition"
-                      >
-                        <i class="bi bi-plus-lg text-xs"></i>
-                      </button>
-                    </form>
-                  </div>
-                </div>
-
-                <!-- Price -->
-                <div class="md:col-span-2 text-center">
-                  <div class="flex flex-col gap-1">
-                    <span class="font-bold text-accent text-lg">
-                      ${{ item.price_at_purchase|mul:item.quantity|div:100 }}
-                    </span>
-
-                    <span class="text-xs text-muted">
-                      ${{ item.price_at_purchase|div:100 }} each
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Remove -->
-                <div class="md:col-span-2 flex md:justify-end">
-                  <form action="{% url 'update_cart_item' %}" method="POST">
-                    {% csrf_token %}
-                    <input
-                      type="hidden"
-                      name="product_id"
-                      value="{{ item.product.id }}"
-                    />
-                    <input type="hidden" name="quantity" value="0" />
-                    <input type="hidden" name="action" value="del" />
-
-                    <button
-                      class="w-full md:w-auto border border-error text-error px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-error hover:text-white transition flex items-center justify-center gap-2"
-                    >
-                      <i class="bi bi-trash3"></i>
-                      Remove
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+          {% include 'cart/partials/product_card.html' %}
 
           {% else %}
           <div class="p-8 text-center border-b border-neutral">
@@ -325,33 +194,6 @@
       </aside>
     </div>
   </div>
-  <script>
-    function cartPage() {
-      return {
-        restoreScroll() {
-          this.$nextTick(() => {
-            const itemId = sessionStorage.getItem("last_cart_item");
-            if (!itemId) return;
-            const element = document.getElementById(`cart-item-${itemId}`);
-            if (!element) return;
-            element.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-            element.classList.add("shadow-2xl", "bg-primary/5", "scale-[1.05]");
-            setTimeout(() => {
-              element.classList.remove(
-                "shadow-2xl",
-                "bg-primary/5",
-                "scale-[1.05]",
-              );
-            }, 2000);
-            sessionStorage.removeItem("last_cart_item");
-          });
-        },
-      };
-    }
-  </script>
 </section>
 
 {% endblock %}

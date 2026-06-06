@@ -34,3 +34,30 @@
     return value;
   }
 </script>
+<script>
+  function updateCartScrollRestore() {
+    return {
+      restoreScroll() {
+        this.$nextTick(() => {
+          const itemId = sessionStorage.getItem("last_cart_item");
+          if (!itemId) return;
+          const element = document.getElementById(`cart-item-${itemId}`);
+          if (!element) return;
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          element.classList.add("shadow-2xl", "bg-primary/5", "scale-[1.05]");
+          setTimeout(() => {
+            element.classList.remove(
+              "shadow-2xl",
+              "bg-primary/5",
+              "scale-[1.05]",
+            );
+          }, 2000);
+          sessionStorage.removeItem("last_cart_item");
+        });
+      },
+    };
+  }
+</script>

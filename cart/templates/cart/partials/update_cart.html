@@ -1,0 +1,47 @@
+<!-- Quantity -->
+<div class="md:col-span-2">
+  <div
+    class="flex items-center justify-center border border-neutral rounded-xl overflow-hidden w-fit mx-auto bg-white shadow-sm"
+  >
+    <form
+      action="{% url 'update_cart_item' %}"
+      method="POST"
+      @submit="sessionStorage.setItem('last_cart_item', '{{ item.id }}')"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+      <input type="hidden" name="quantity" value="1" />
+      <input type="hidden" name="action" value="dec" />
+
+      <button
+        class="w-10 h-10 flex items-center justify-center text-muted hover:bg-neutral hover:text-primary transition"
+      >
+        <i class="bi bi-dash-lg text-xs"></i>
+      </button>
+    </form>
+
+    <input
+      type="text"
+      value="{{ item.quantity }}"
+      disabled
+      class="w-10 text-center text-sm font-semibold bg-white outline-none"
+    />
+
+    <form
+      action="{% url 'update_cart_item' %}"
+      method="POST"
+      @submit="sessionStorage.setItem('last_cart_item', '{{ item.id }}')"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+      <input type="hidden" name="quantity" value="1" />
+      <input type="hidden" name="action" value="inc" />
+
+      <button
+        class="w-10 h-10 flex items-center justify-center text-muted hover:bg-neutral hover:text-primary transition"
+      >
+        <i class="bi bi-plus-lg text-xs"></i>
+      </button>
+    </form>
+  </div>
+</div>

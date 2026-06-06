@@ -1,4 +1,8 @@
-<form action="{% url 'update_cart_item' %}" method="POST">
+<form
+  action="{% url 'update_cart_item' %}"
+  method="POST"
+  @submit="sessionStorage.setItem('last_cart_item', '{{ product.id }}')"
+>
   {% csrf_token %}
   <input
     type="hidden"
@@ -11,7 +15,6 @@
   <button
     class="flex-1 bg-primary text-white p-3 rounded-2xl text-sm font-medium hover:opacity-90 transition flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
     type="submit"
-    :disabled="!productIsAvailable || productStockCount <= 0"
   >
     <i class="bi bi-cart3"></i>
     Add to Cart
