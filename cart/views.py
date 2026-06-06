@@ -10,6 +10,7 @@ from django.views.generic import View
 
 from cart.forms import UpdateCartItemForm
 from cart.models import Cart, CartItem
+from djangify.utils import redirect_url
 
 
 def update_cart_item(request: HttpRequest):
@@ -41,7 +42,7 @@ def update_cart_item(request: HttpRequest):
         current_quantity = 0
     if action == "del":
         item.delete()
-        return redirect("cart_view")
+        return redirect(redirect_url(request))
     elif action == "inc":
         new_quantity = current_quantity + quantity
     else:
@@ -49,10 +50,10 @@ def update_cart_item(request: HttpRequest):
 
     if new_quantity <= 0:
         item.delete()
-        return redirect("cart_view")
+        return redirect(redirect_url(request))
     if new_quantity > product.stock:
         messages.error(request, "Sorry there is not enough stock from this product")
-        return redirect("cart_view")
+        return redirect(redirect_url(request))
 
     item.quantity = new_quantity
 
@@ -63,7 +64,7 @@ def update_cart_item(request: HttpRequest):
         ]
     )
 
-    return redirect("cart_view")
+    return redirect(redirect_url(request))
 
 
 class CartView(View):

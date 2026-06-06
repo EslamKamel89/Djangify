@@ -3,6 +3,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
+from cart.models import Cart, CartItem
 from category.models import Category
 from djangify.utils import pr
 from store.models import Product
@@ -28,7 +29,7 @@ class StoreView(View):
                 "image_url": next(
                     (
                         img.image.url
-                        for img in p.images.all()
+                        for img in p.images.all()  # type: ignore
                         if img.is_main and img.image
                     ),
                     "https://placehold.co/600x400",
@@ -37,6 +38,7 @@ class StoreView(View):
             }
             for p in products
         ]
+
         return render(
             request,
             "store/index.html",
@@ -55,12 +57,18 @@ class ProductDetailsView(View):
             slug=product_slug,
             is_available=True,
         )
-        images = product.images.order_by("-is_main")
+        images = product.images.order_by("-is_main")  # type: ignore
+        if not request.session.session_key:
+            request.session.create()
+        cart_item = CartItem.objects.filter(
+            cart__session_id=request.session.session_key, product=product
+        ).first()
         return render(
             request,
             "store/product_detail.html",
             {
                 "product": product,
+                "cart_item": cart_item,
                 "images": images,
                 "main_image": pydash.get(images.first(), ".image.url"),
             },

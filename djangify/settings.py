@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -70,6 +71,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "category.context_processors.all_categories",
+                "cart.context_processors.cart_item_count",
             ],
         },
     },
