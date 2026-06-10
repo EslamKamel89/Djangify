@@ -1,4 +1,5 @@
 import pydash
+from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
@@ -11,15 +12,17 @@ from store.models import Product
 
 class StoreView(View):
     def get(self, request: HttpRequest):
-        products = (
-            Product.objects.prefetch_related("images").filter(is_available=True).all()
-        )
+        products = Product.objects.prefetch_related("images").filter(is_available=True)
         selected_category_slug = request.GET.get("category", None)
         selected_category = None
         if selected_category_slug:
             selected_category = get_object_or_404(Category, slug=selected_category_slug)
             products = products.filter(category__slug=selected_category_slug)
         products_count = products.count()
+        per_page = request.GET.get("per_page", "6")
+        page = int(request.GET.get("page", 1))
+        paginator = Paginator(products, per_page)
+        page_obj = paginator.get_page(page)
         products = [
             {
                 "id": p.pk,
@@ -36,9 +39,8 @@ class StoreView(View):
                 ),
                 "slug": p.slug,
             }
-            for p in products
+            for p in page_obj.object_list
         ]
-
         return render(
             request,
             "store/index.html",
@@ -46,6 +48,11 @@ class StoreView(View):
                 "products": products,
                 "products_count": products_count,
                 "selected_category": selected_category,
+                "page_obj": page_obj,
+                "pages": range(1, page_obj.paginator.num_pages + 1),
+                "curr_page": page,
+                "per_page": per_page,
+                "per_page_options": ["6", "12", "24", "48"],
             },
         )
 

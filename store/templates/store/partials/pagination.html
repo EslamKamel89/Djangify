@@ -1,0 +1,63 @@
+<!-- Pagination -->
+<div
+  class="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 border border-neutral rounded-2xl bg-white p-4 shadow-sm"
+>
+  <!-- Pages -->
+  <div class="flex flex-wrap justify-center items-center gap-2">
+    {% if page_obj.has_previous %}
+    <a
+      href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}&category={{ selected_category.slug }}"
+      class="h-11 px-4 rounded-xl border border-neutral bg-white text-muted hover:border-primary hover:text-primary transition flex items-center justify-center gap-2"
+    >
+      <i class="bi bi-chevron-left"></i>
+      <span class="hidden sm:inline">Previous</span>
+    </a>
+    {% endif %} {% for p in pages %}
+    <a
+      href="?page={{ p }}&per_page={{ per_page }}&category={{ selected_category.slug }}"
+      class="min-w-11 h-11 px-3 rounded-xl border transition flex items-center justify-center font-medium {% if p == curr_page %} bg-primary text-white border-primary shadow-sm {% else %} border-neutral bg-white hover:border-primary hover:text-primary {% endif %}"
+    >
+      {{ p }}
+    </a>
+    {% endfor %} {% if page_obj.has_next %}
+    <a
+      href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}&category={{ selected_category.slug }}"
+      class="h-11 px-4 rounded-xl border border-neutral bg-white text-muted hover:border-primary hover:text-primary transition flex items-center justify-center gap-2"
+    >
+      <span class="hidden sm:inline">Next</span>
+      <i class="bi bi-chevron-right"></i>
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Per Page -->
+  <form method="GET" class="flex items-center gap-3">
+    {% if selected_category %}
+    <input type="hidden" name="category" value="{{ selected_category.slug }}" />
+    {% endif %}
+
+    <input type="hidden" name="page" value="1" />
+
+    <label class="text-sm text-muted whitespace-nowrap">
+      Products per page
+    </label>
+
+    <select
+      name="per_page"
+      onchange="this.form.submit()"
+      class="h-11 px-4 border border-neutral rounded-xl bg-white focus:outline-none focus:border-primary"
+    >
+      {% for option in per_page_options %}
+      <!--prettier-ignore-->
+      <option
+        value="{{ option }}"
+        {% if option == per_page %}
+        selected
+        {% endif %}
+      >
+        {{ option }}
+      </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
