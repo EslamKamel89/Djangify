@@ -118,34 +118,20 @@
           <div class="py-5 border-b border-neutral">
             <div class="flex items-center justify-between mb-3">
               <h3 class="font-semibold text-sm text-primary">Choose Color</h3>
-
-              <span class="text-xs text-muted">Gold Selected</span>
+              <span x-show="selectedColor" class="text-xs text-muted"
+                ><span x-text="selectedColor"></span> Selected</span
+              >
             </div>
 
             <div class="flex flex-wrap gap-3">
-              <button
-                class="px-4 py-2 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
-              >
-                Silver
-              </button>
-
-              <button
-                class="px-4 py-2 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
-              >
-                Gray
-              </button>
-
-              <button
-                class="px-4 py-2 text-sm rounded-xl bg-primary text-white border border-primary shadow-sm"
-              >
-                Gold
-              </button>
-
-              <button
-                class="px-4 py-2 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
-              >
-                Black
-              </button>
+              <template x-for="color in colors">
+                <button
+                  class="px-4 py-2 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition cursor-pointer"
+                  :class="{'bg-primary text-white border border-primary':selectedColor===color}"
+                  x-text="color"
+                  @click="selectedColor = color"
+                ></button>
+              </template>
             </div>
           </div>
 
@@ -153,34 +139,20 @@
           <div class="py-5 border-b border-neutral">
             <div class="flex items-center justify-between mb-3">
               <h3 class="font-semibold text-sm text-primary">Select Size</h3>
-
-              <span class="text-xs text-muted">Medium Selected</span>
+              <span x-show="selectedSize" class="text-xs text-muted"
+                ><span x-text="selectedSize"></span> Selected</span
+              >
             </div>
 
             <div class="flex flex-wrap gap-3">
-              <button
-                class="w-11 h-11 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
-              >
-                S
-              </button>
-
-              <button
-                class="w-11 h-11 text-sm rounded-xl bg-primary text-white border border-primary shadow-sm"
-              >
-                M
-              </button>
-
-              <button
-                class="w-11 h-11 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
-              >
-                L
-              </button>
-
-              <button
-                class="w-11 h-11 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
-              >
-                XL
-              </button>
+              <template x-for="size in sizes">
+                <button
+                  class="w-11 h-11 text-sm rounded-xl border border-neutral hover:border-primary hover:text-primary transition"
+                  :class="{'bg-primary text-white border border-primary':size===selectedSize}"
+                  x-text="size"
+                  @click="selectedSize = size"
+                ></button>
+              </template>
             </div>
           </div>
 
@@ -336,6 +308,10 @@
 <script>
   function product_details_app() {
     return {
+      colors: ["Sliver", "Gold", "Black", "Blue", "Gray"],
+      sizes: ["S", "M", "L", "XL"],
+      selectedColor: null,
+      selectedSize: null,
       selectedImage: "{{ main_image }}",
       productIsAvailable: JSON.parse(
         document.getElementById("product_is_available_id").textContent,
