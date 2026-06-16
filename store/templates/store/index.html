@@ -77,6 +77,8 @@
           <!--prettier-ignore-->
           {% for product in products %}
           {% include 'store/partials/product_card.html'%}
+          {% empty %}
+          {% include 'store/partials/no_products_found.html' %}
           {% endfor %}
         </div>
         {% include 'store/partials/pagination.html' %}

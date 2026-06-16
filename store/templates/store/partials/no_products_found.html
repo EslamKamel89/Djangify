@@ -1,0 +1,38 @@
+<div class="col-span-full">
+  <div
+    class="bg-neutral rounded-3xl border border-neutral p-8 md:p-12 text-center"
+  >
+    <div
+      class="w-20 h-20 mx-auto rounded-full bg-white border border-neutral flex items-center justify-center shadow-sm"
+    >
+      <i class="bi bi-search text-3xl text-muted"></i>
+    </div>
+
+    <h3 class="mt-5 text-xl font-bold text-primary">No Products Found</h3>
+
+    <p class="mt-2 text-sm md:text-base text-muted max-w-md mx-auto">
+      We couldn't find any products matching your current filters. Try browsing
+      another category or clear your filters.
+    </p>
+
+    <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+      <a
+        href="{% url 'store' %}"
+        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white font-medium hover:opacity-90 transition"
+      >
+        <i class="bi bi-grid"></i>
+        View All Products
+      </a>
+
+      {% if selected_category %}
+      <a
+        href="{% url 'store' %}"
+        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-neutral bg-white hover:border-primary hover:text-primary transition"
+      >
+        <i class="bi bi-arrow-counterclockwise"></i>
+        Clear Filters
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>

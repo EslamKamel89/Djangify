@@ -86,13 +86,17 @@
     </div>
 
     <!-- Search -->
-    <form class="w-full md:flex-1 flex">
+    <form class="w-full md:flex-1 flex" method="GET" action="{% url 'store' %}">
       <input
         type="text"
         placeholder="Search products..."
+        name="q"
+        value="{{ query_params.q }}"
         class="flex-1 border border-neutral px-4 py-2 rounded-l-md focus:outline-none focus:border-primary"
       />
-      <button class="bg-primary text-white px-5 rounded-r-md">🔍</button>
+      <button class="bg-primary text-white px-5 rounded-r-md">
+        <i class="bi bi-search"></i>
+      </button>
     </form>
 
     <!-- Desktop Cart -->

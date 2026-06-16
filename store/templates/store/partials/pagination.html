@@ -6,7 +6,7 @@
   <div class="flex flex-wrap justify-center items-center gap-2">
     {% if page_obj.has_previous %}
     <a
-      href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}&category={{ selected_category.slug }}"
+      href="?page={{ page_obj.previous_page_number }}&per_page={{ per_page }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if query_params.q %}&q={{ query_params.q }}{% endif %}"
       class="h-11 px-4 rounded-xl border border-neutral bg-white text-muted hover:border-primary hover:text-primary transition flex items-center justify-center gap-2"
     >
       <i class="bi bi-chevron-left"></i>
@@ -14,14 +14,14 @@
     </a>
     {% endif %} {% for p in pages %}
     <a
-      href="?page={{ p }}&per_page={{ per_page }}&category={{ selected_category.slug }}"
+      href="?page={{ p }}&per_page={{ per_page }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if query_params.q %}&q={{ query_params.q }}{% endif %}"
       class="min-w-11 h-11 px-3 rounded-xl border transition flex items-center justify-center font-medium {% if p == curr_page %} bg-primary text-white border-primary shadow-sm {% else %} border-neutral bg-white hover:border-primary hover:text-primary {% endif %}"
     >
       {{ p }}
     </a>
     {% endfor %} {% if page_obj.has_next %}
     <a
-      href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}&category={{ selected_category.slug }}"
+      href="?page={{ page_obj.next_page_number }}&per_page={{ per_page }}{% if selected_category %}&category={{ selected_category.slug }}{% endif %}{% if query_params.q %}&q={{ query_params.q }}{% endif %}"
       class="h-11 px-4 rounded-xl border border-neutral bg-white text-muted hover:border-primary hover:text-primary transition flex items-center justify-center gap-2"
     >
       <span class="hidden sm:inline">Next</span>
@@ -35,6 +35,7 @@
     {% if selected_category %}
     <input type="hidden" name="category" value="{{ selected_category.slug }}" />
     {% endif %}
+    <input type="hidden" name="q" value="{{ query_params.q }}" />
 
     <input type="hidden" name="page" value="1" />
 
