@@ -1,5 +1,6 @@
 import pydash
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.views import View
@@ -18,9 +19,16 @@ class StoreView(View):
         if selected_category_slug:
             selected_category = get_object_or_404(Category, slug=selected_category_slug)
             products = products.filter(category__slug=selected_category_slug)
+        q = request.GET.get("q", None)
+        if q and q.strip():
+            products = products.filter(
+                Q(name__icontains=q.strip()) | Q(description__icontains=q.strip())
+            )
         products_count = products.count()
         per_page = request.GET.get("per_page", "6")
-        page = int(request.GET.get("page", 1))
+        per_page = per_page if per_page.isdigit() else "6"
+        page = request.GET.get("page", "1")
+        page = int(page) if page.isdigit() else 1
         paginator = Paginator(products, per_page)
         page_obj = paginator.get_page(page)
         products = [
